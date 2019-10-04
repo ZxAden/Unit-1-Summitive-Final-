@@ -4,9 +4,9 @@ float rocketshipX=400, RockSpeed=0, rocketshipY=700, FireBallRockX[] = new float
 float bombX=1000, bombY=5000, enemyRocketX=400, enemyRocketY=200, enemyX=2, ballSpeed=4, ballSpeedY=6;
 float enemyBombX []=new float [5], enemyBombY []=new float [5], pongBallX=300, pongBallY=400;
 float xPos = 300, yPos=400, xBackground = 0, point = 1, gravity = 0, ySpeed = 0, menu= 1, Pipex[] = new float[2], Pipey[] = new float[2]; //FlappyBird Floats
-int score = 109, highScore, highScore1, RocketDamage=1, enemyShipLife=10;
+int score = 0, highScore, highScore1, RocketDamage=1, enemyShipLife=10;
 PImage Background, Bird, Pipe, Pipe2;
-boolean gameover=false;
+boolean gameover=false,d = false, a = false;
 boolean menu1=true, menu2=false, RocketGame=false, FlappyBird=false, PongGame=false, menu3=false, menu4=false, menu5=false, menu6=false, level1=false;
 PImage Start, RocketIcon, FlappyBirdIcon, PongIcon, Start2, rocketship, SpaceBackground, FireBallRock, youDied, Rectangle, bomb, enemyBomb, rock2, EnemyRocket, winScreen;
 int x = 50, y = 50, move_x = -25, move_y = -20, x2 = 750, y2 = 750, move_x2 = 25, move_y2 = 20, x3 = 0, y3=0;
@@ -30,12 +30,12 @@ void setup()
   Bird=loadImage("Bird.png");
   Pipe=loadImage("Pipe.png"); 
   Pipe2=loadImage("Pipe2.png");//LoadImages
-  Background.resize(800, 800);
+  Background.resize(2000, 800);
   Bird.resize(60, 50);
   Pipe.resize(130, 600);
   Pipe2.resize(130, 600);
   rocketship=loadImage("rocketship.png");
-  rocketship.resize(50, 70);
+  rocketship.resize(50, 75);
   SpaceBackground=loadImage("SpaceBackground.jpg");
   SpaceBackground.resize(800, 800);
   FireBallRock=loadImage("rock.png");
@@ -55,6 +55,7 @@ void setup()
 }
 void draw()
 {
+  
   if (menu1==true) 
   {
     background(250, 5, 5);
@@ -100,7 +101,7 @@ void draw()
   {
     background(0);
     imageMode(CORNER);
-    image(Background, xBackground, 0);//Background
+    image(Background, xBackground, 0);//Background   
     if (menu==1) 
     {
       fill(5, 200, 5);
@@ -174,6 +175,15 @@ void draw()
       text("High Score: " +highScore, 360, 50);
     }
   }
+  /*
+  So this space is to help me not get confused
+  
+  
+  
+  
+  
+  
+  */
   if (RocketGame==true) 
   {
     background(0);
@@ -194,6 +204,8 @@ void draw()
     if (RocketGame==true&&menu3==true) 
     {
       image(rocketship, rocketshipX, rocketshipY);
+      if(a==true){rocketshipX-=10;}
+      if(d==true){rocketshipX+=10;}
       fill(255);
       textSize(40);
       text("Score: "+score, 100, 50);
@@ -281,6 +293,8 @@ void draw()
         textSize(40);
         text("Score: "+score, 100, 50);
         text("High Score: " +highScore1, 400, 50);
+        a=false;
+        d=false;
       }
       if (menu5==true)
       {
@@ -292,9 +306,6 @@ void draw()
         text("HighScore: " +highScore1, 15, 650);
         text("Continue", 50, 700);
       }
-
-
-
       if (PongGame==true) 
       {
         background(0);
@@ -324,18 +335,24 @@ void keyPressed() {
     gravity=-12;
   }
   if (RocketGame==true&&key=='d') {
-    rocketshipX=rocketshipX+30;
+    d=true;
   }
   if (RocketGame==true&&key=='a') {
-    rocketshipX=rocketshipX-30;
-  }
-  if (RocketGame==true&&key=='w') {
-    rocketshipY=rocketshipY-30;
+    a=true;
   }
   if (RocketGame==true&&key==' ') 
   {
     bombY=rocketshipY;
     bombX=rocketshipX;
+  }
+}
+void keyReleased()
+{
+    if (RocketGame==true&&key=='d') {
+    d=false;
+  }
+    if (RocketGame==true&&key=='a') {
+    a=false;;
   }
 }
 void mousePressed() {
@@ -362,7 +379,11 @@ void mousePressed() {
     FireBallRockY[4]=130; 
     FireBallRockY[5]=180; 
     FireBallRockY[6]=250; 
-    FireBallRockY[7]=2800;
+    FireBallRockY[7]=250;
+    FireBallRockY[8]=220;
+    FireBallRockY[9]=80;
+    FireBallRockY[10]=80;
+    FireBallRockY[11]=180;
     score=0;
     rocketshipX=400;
   }
