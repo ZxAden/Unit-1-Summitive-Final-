@@ -2,14 +2,14 @@
 float Menu1X=400, Menu1Y=400, RocketIconX=150, RocketIconY=400, PongIconX=650, PongIconY=400, FlappyBirdIconX=400, FlappyBirdIconY=600;
 float rocketshipX=400, RockSpeed=0, rocketshipY=700, FireBallRockX[] = new float [12], FireBallRockY[]= new float [12];
 float bombX=1000, bombY=5000, enemyRocketX=400, enemyRocketY=200, enemyX=2, ballSpeed=4, ballSpeedY=6;
-float enemyBombX []=new float [5], enemyBombY []=new float [5], pongBallX=300, pongBallY=400;
+float enemyBombX []=new float [5], enemyBombY []=new float [5], pongBallX=300, pongBallY=random(height);
 float xPos = 300, yPos=400, xBackground = 0, point = 1, gravity = 0, ySpeed = 0, menu= 1, Pipex[] = new float[2], Pipey[] = new float[2]; //FlappyBird Floats
-int score = 0, highScore, highScore1, RocketDamage=1, enemyShipLife=10;
+int score = 180, highScore, highScore1, RocketDamage=1, enemyShipLife=10, pongScore=0, pongScore2=0;
 PImage Background, Bird, Pipe, Pipe2;
-boolean gameover=false,d = false, a = false;
-boolean menu1=true, menu2=false, RocketGame=false, FlappyBird=false, PongGame=false, menu3=false, menu4=false, menu5=false, menu6=false, level1=false;
-PImage Start, RocketIcon, FlappyBirdIcon, PongIcon, Start2, rocketship, SpaceBackground, FireBallRock, youDied, Rectangle, bomb, enemyBomb, rock2, EnemyRocket, winScreen;
-int x = 50, y = 50, move_x = -25, move_y = -20, x2 = 750, y2 = 750, move_x2 = 25, move_y2 = 20, x3 = 0, y3=0;
+boolean gameover=false, d = false, a = false, l=false, j=false;
+boolean menu1=true, menu2=false, RocketGame=false, FlappyBird=false, PongGame=false, menu3=false, menu4=false, menu5=false, menu6=false, level1=false, menu7=false;
+PImage Start, RocketIcon, FlappyBirdIcon, PongIcon, Start2, rocketship, SpaceBackground, FireBallRock, youDied, Rectangle, bomb, enemyBomb, rock2, EnemyRocket, winScreen, pongStart;
+float lineY1=350, lineY2=450, lineY3=350, lineY4=450;
 
 
 void setup()
@@ -52,10 +52,12 @@ void setup()
   EnemyRocket.resize(150, 150);
   winScreen=loadImage("winScreen.png");
   winScreen.resize(800, 800);
+  pongStart=loadImage("PongStart.png");
+  pongStart.resize(400, 400);
 }
 void draw()
 {
-  
+
   if (menu1==true) 
   {
     background(250, 5, 5);
@@ -177,13 +179,13 @@ void draw()
   }
   /*
   So this space is to help me not get confused
-  
-  
-  
-  
-  
-  
-  */
+   
+   
+   
+   
+   
+   
+   */
   if (RocketGame==true) 
   {
     background(0);
@@ -204,8 +206,12 @@ void draw()
     if (RocketGame==true&&menu3==true) 
     {
       image(rocketship, rocketshipX, rocketshipY);
-      if(a==true){rocketshipX-=10;}
-      if(d==true){rocketshipX+=10;}
+      if (a==true) {
+        rocketshipX-=10;
+      }
+      if (d==true) {
+        rocketshipX+=10;
+      }
       fill(255);
       textSize(40);
       text("Score: "+score, 100, 50);
@@ -221,7 +227,7 @@ void draw()
           score=score+1;
           highScore1 = max(score, highScore1);
         }
-        if (rocketshipX<0||rocketshipX>width||rocketshipY>height||abs(rocketshipX - FireBallRockX[i])<60&&abs(rocketshipY-FireBallRockY[i])<60)
+        if (rocketshipX<0||rocketshipX>width||rocketshipY>height||abs(rocketshipX - FireBallRockX[i])<50&&abs(rocketshipY-FireBallRockY[i])<60)
         {
           menu4=true;
           RocketGame=false;
@@ -237,8 +243,6 @@ void draw()
         text("ENEMY WARCRAFT HP: " +enemyShipLife, 10, 100);
         for (int i=0; i<5; i++)
         {
-
-
           image(enemyBomb, enemyBombX[i], enemyBombY[i]);
           enemyBombY[i]+=6;
           if (score<101)
@@ -277,10 +281,6 @@ void draw()
       {
         level1=false;
       }
-      if (score>200)
-      {
-      }
-
       if (menu4==true)
       {
         image(youDied, 400, 400);
@@ -306,25 +306,106 @@ void draw()
         text("HighScore: " +highScore1, 15, 650);
         text("Continue", 50, 700);
       }
-      if (PongGame==true) 
+    }
+  }
+
+  if (PongGame==true) 
+  {
+    background(255);
+    //image(SpaceBackground, 400, 400);
+    if (menu6==false&&PongGame==true)
+    {
+      fill(255);
+      rect(200, 350, 400, 100);
+      rect(100, 550, 600, 100);
+      rect(100, 450, 600, 100);
+      fill(0);
+      textSize(40);
+      image(pongStart, 400, 250);
+      text("Player1 Use A and D to Move", 125, 525);
+      text("Player2 Use J and L to Move", 125, 625);
+    } else {
+      fill(0);
+      ellipse(pongBallX, pongBallY, 25, 25);
+      pongBallX+=ballSpeed;
+      pongBallY+=ballSpeedY;
+      fill(0);
+      textSize(20);
+      text("Player 1 Score: "+pongScore, 50, 50);
+      text("Player 2 Score: "+pongScore2, 600, 50);
+      if (pongScore>9||pongScore2>9)
+      {
+        menu7=true;
+      }
+      if (menu7==true&&pongScore2==10)
       {
         background(0);
-        image(SpaceBackground, 400, 400);
-        fill(0);
-        ellipse(pongBallX, pongBallY, 50, 50);
-        pongBallX+=ballSpeed;
-        pongBallY+=ballSpeedY;
-        if (pongBallX>width||pongBallY>height)
-        {
-          ballSpeed=-random(10);
-          ballSpeedY=-random(10);
-        }
-        if (pongBallX<0||pongBallY<0)
-        {
-          ballSpeed=random(10);
-          ballSpeedY=random(10);
-          ;
-        }
+        fill(255);
+        textSize(50);
+        text("Player 1 Score: "+pongScore, 50, 50);
+        text("Player 2 Score: "+pongScore2, 600, 50);
+        text("Player 2 Wins", 200, 300);
+        text("click to restart", 200, 500);
+      }
+      if (menu7==true&&pongScore==10)
+      {
+        background(0);
+        fill(255);
+        textSize(50);
+        text("Player 1 Score: "+pongScore, 50, 50);
+        text("Player 2 Score: "+pongScore2, 600, 50);
+        text("Player 1 Wins", 200, 300);
+        text("click to restart", 200, 500);
+      }
+      if (pongBallX<12.5)
+      {
+        ballSpeed=7;
+        pongScore2=pongScore2+1;
+        pongBallY=200+random(400);
+        pongBallX=400;
+      }
+      if (pongBallX>width)
+      {
+        ballSpeed=-7;
+        pongScore=pongScore+1;
+        pongBallY=200+random(400);
+        pongBallX=400;
+      }
+      if (pongBallY<12.5)
+      {
+        ballSpeedY=7;
+      }
+      if (pongBallY>787.5)
+      {
+        ballSpeedY=-7;
+      }
+      strokeWeight(20);
+      line(50, lineY1, 50, lineY2);
+      if (a==true) 
+      {
+        lineY1-=10;
+        lineY2-=10;
+      }
+      if (d==true) {
+        lineY1+=10;
+        lineY2+=10;
+      }
+      line(750, lineY3, 750, lineY4);
+      if (j==true) {
+        lineY3-=10;
+        lineY4-=10;
+      }
+      if (l==true) {
+        lineY3+=10;
+        lineY4+=10;
+      }
+      if (abs(pongBallY-lineY1)<100&&pongBallX<65&&abs(pongBallY-lineY2)<100)
+      {
+        ballSpeed=7;
+      }
+      if (abs(pongBallY-lineY3)<100&&pongBallX>730&&abs(pongBallY-lineY4)<100)
+      {
+        ballSpeed=-7;
       }
     }
   }
@@ -334,11 +415,17 @@ void keyPressed() {
   if (FlappyBird==true&&key==' ') {
     gravity=-12;
   }
-  if (RocketGame==true&&key=='d') {
+  if (RocketGame==true&&key=='d'||PongGame==true&&key=='d') {
     d=true;
   }
-  if (RocketGame==true&&key=='a') {
+  if (RocketGame==true&&key=='a'||PongGame==true&&key=='a') {
     a=true;
+  }  
+  if (PongGame==true&&key=='l') {
+    l=true;
+  }
+  if (PongGame==true&&key=='j') {
+    j=true;
   }
   if (RocketGame==true&&key==' ') 
   {
@@ -348,11 +435,17 @@ void keyPressed() {
 }
 void keyReleased()
 {
-    if (RocketGame==true&&key=='d') {
+  if (RocketGame==true&&key=='d'||PongGame==true&&key=='d') {
     d=false;
   }
-    if (RocketGame==true&&key=='a') {
-    a=false;;
+  if (RocketGame==true&&key=='a'||PongGame==true&&key=='a') {
+    a=false;
+  }
+  if (PongGame==true&&key=='l') {
+    l=false;
+  }
+  if (PongGame==true&&key=='j') {
+    j=false;
   }
 }
 void mousePressed() {
@@ -362,6 +455,9 @@ void mousePressed() {
     Pipex[1]=1000;
     Pipey[1]=500;
     menu=0;
+  }
+  if (menu6==false&&PongGame==true) {
+    menu6=true;
   }
   if (FlappyBird==true&&gameover==true&&abs(mouseX -300)<300&&abs(mouseY - 300)<200&&mousePressed) {
     gameover=false;
@@ -386,6 +482,7 @@ void mousePressed() {
     FireBallRockY[11]=180;
     score=0;
     rocketshipX=400;
+    enemyShipLife=10;
   }
   if (menu5==true&&mousePressed)
   {
@@ -411,5 +508,10 @@ void mousePressed() {
   }
   if (RocketGame==true&&abs(mouseX-400)<100&&abs(mouseY-400)<50&&mousePressed) {
     menu3=true;
+  }
+  if(PongGame==true&&menu7==true)
+  {
+    pongScore=0;
+    pongScore2=0;
   }
 }
